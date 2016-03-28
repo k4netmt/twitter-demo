@@ -17,4 +17,4 @@ The following advanced user stories are optional:
 * [x] Bonus: Leverage RecyclerView as a replacement for the ListView and ArrayAdapter for all lists of tweets. 
 * [x] Bonus: Replace Picasso with Glide for more efficient image rendering.
 
-![Video Walkthrough](twitter-demo/twitterdemo.gif)
+![Video Walkthrough](https://github.com/k4netmt/twitter-demo/blob/master/twitterdemo.gif)
