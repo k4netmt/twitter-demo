@@ -2,12 +2,16 @@ package com.codepath.apps.twitterdemo.clients;
 
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
+import org.scribe.model.Parameter;
 
 import android.content.Context;
 
+import com.codepath.apps.twitterdemo.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 /*
  * 
@@ -21,22 +25,33 @@ import com.loopj.android.http.RequestParams;
  * NOTE: You may want to rename this object based on the service i.e TwitterClient or FlickrClient
  * 
  */
-public class RestClient extends OAuthBaseClient {
+public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
 	public static final String REST_CONSUMER_KEY = "hIXxNgdzILMW9koiw9SA0tNAs";       // Change this
 	public static final String REST_CONSUMER_SECRET = "BiiJsXMLn9pNase0zQEbFTPe3ClS06oot2NfFuQrUSqa8nZ933"; // Change this
 	public static final String REST_CALLBACK_URL = "oauth://TwitterClientKanet"; // Change this (here and in manifest)
-
-	public RestClient(Context context) {
+	private static final int COUNT=25;
+	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
 	}
 
-	public void getHomeTimeline(AsyncHttpResponseHandler hanlder){
+	public void getHomeTimeline(RequestParams params,JsonHttpResponseHandler hanlder){
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
-		client.get(apiUrl, null, hanlder);
+	/*	RequestParams parameter=new RequestParams();
+		parameter.put("count",COUNT);
+		parameter.put("since_id",1);*/
+		client.get(apiUrl, params, hanlder);
+	}
+
+	public void postTweet(Tweet tweet){
+		String apiUrl = getApiUrl("statuses/tweet/:" + tweet.getUser().getUid()+".json");
+		RequestParams parameter=new RequestParams();
+
 
 	}
+
+
 	// CHANGE THIS
 	// DEFINE METHODS for different API endpoints here
 	public void getInterestingnessList(AsyncHttpResponseHandler handler) {

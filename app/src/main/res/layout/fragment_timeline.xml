@@ -1,0 +1,13 @@
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_timeline"
+    tools:context="com.codepath.apps.twitterdemo.fraqments.TimelineFragment">
+
+
+    <!-- TODO: Update blank fragment layout -->
+    <include layout="@layout/content_timeline"/>
+
+</android.support.v4.widget.SwipeRefreshLayout>
