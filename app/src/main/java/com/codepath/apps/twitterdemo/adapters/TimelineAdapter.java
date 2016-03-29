@@ -16,6 +16,7 @@ import com.codepath.apps.twitterdemo.models.TimeStamp;
 import com.codepath.apps.twitterdemo.models.Tweet;
 import com.codepath.apps.twitterdemo.models.Variants;
 import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelinePhoto;
+import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelineText;
 import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelineVideo;
 
 import java.util.List;
