@@ -79,15 +79,14 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        mTweets.clear();
-        popularTimeline(0);
+        popularTimeline();
     }
 
     private void setupView(View rootView) {
         RecyclerView rvSearch = (RecyclerView)rootView.findViewById(R.id.rvSearch);
         mTweets=new ArrayList<>();
         mTweets.clear();
-        popularTimeline(0);
+        popularTimeline();
         mTimelineAdapter=new TimelineAdapter(mTweets);
 
         rvSearch.setHasFixedSize(true);
@@ -102,20 +101,15 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                popularTimeline(page);
+                popularTimeline();
             }
         });
     }
 
-    private void popularTimeline(int page) {
+    private void popularTimeline() {
         RequestParams params = new RequestParams();
-        if (mTweets.size()==0){
-            since_id=1;
-            params.put("count",10);
-        }else{
-            max_id=count*(page+1);
-            params.put("count",max_id);
-        }
+        params.put("since_id",1);
+        params.put("count",200);
         clients.getHomeTimeline(params,new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -132,6 +126,7 @@ public class TimelineFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 //Load local Data
                 Toast.makeText(getActivity().getApplicationContext(),"No internet access",Toast.LENGTH_LONG).show();
+                Log.d("Debug,",errorResponse.toString());
             }
         });
     }

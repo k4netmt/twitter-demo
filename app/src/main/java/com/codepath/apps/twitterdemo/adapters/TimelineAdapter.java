@@ -4,12 +4,10 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -18,11 +16,8 @@ import com.codepath.apps.twitterdemo.models.TimeStamp;
 import com.codepath.apps.twitterdemo.models.Tweet;
 import com.codepath.apps.twitterdemo.models.Variants;
 import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelinePhoto;
-import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelineText;
 import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelineVideo;
-import com.yqritc.scalablevideoview.ScalableType;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
