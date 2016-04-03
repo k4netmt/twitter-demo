@@ -27,6 +27,7 @@ import java.util.List;
  "is_translator": false,
  "profile_link_color": "0084B4",
  */
+@Parcel
 public class User{
     @SerializedName("name")
     private String name;
@@ -39,6 +40,30 @@ public class User{
 
     @SerializedName("profile_image_url")
     private String profileImageUrl;
+
+    @SerializedName("followers_count")
+    private long followers_count;
+
+    @SerializedName("friends_count")
+    private long friends_count;
+
+    @SerializedName("created_at")
+    private String created_at;
+
+    @SerializedName("profile_banner_url")
+    private String profileBannerUrl;
+
+    public long getFollowers_count() {
+        return followers_count;
+    }
+
+    public long getFriends_count() {
+        return friends_count;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
 
     public String getName() {
         return name;
@@ -54,6 +79,10 @@ public class User{
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public String getProfileBannerUrl() {
+        return profileBannerUrl;
     }
 
     public User() {

@@ -58,13 +58,71 @@
                     style="@style/timeline_content"/>
 
                 <ImageView
-                    android:layout_width="600dp"
-                    android:layout_height="400dp"
+                    android:layout_width="400dp"
+                    android:layout_height="300dp"
+                    android:scaleType="fitXY"
                     android:id="@+id/ivImage"
                     android:layout_below="@id/tvText"/>
 
             </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageButton
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/ivReply"
+                        android:src="@drawable/replyaction"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageButton
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/ivRetweet"
+                        android:src="@drawable/retweetaction"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvRetweet"
+                        android:layout_toRightOf="@+id/ivRetweet"
+                        android:text="0"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <ImageButton
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/ivLike"
+                        android:src="@drawable/likeaction"
+                        android:scaleType="fitXY"
+                        android:background="@null"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvLike"
+                        android:layout_toRightOf="@+id/ivLike"
+                        android:textSize="14sp"
+                        android:text="0"/>
+                </RelativeLayout>
 
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 

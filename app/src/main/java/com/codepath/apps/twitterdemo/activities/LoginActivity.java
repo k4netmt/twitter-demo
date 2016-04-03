@@ -2,19 +2,36 @@ package com.codepath.apps.twitterdemo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.View;
 
 import com.codepath.apps.twitterdemo.R;
+import com.codepath.apps.twitterdemo.application.TwitterApplication;
 import com.codepath.apps.twitterdemo.clients.TwitterClient;
+import com.codepath.apps.twitterdemo.models.Tweet;
+import com.codepath.apps.twitterdemo.models.User;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.parceler.Parcels;
+
+import java.util.List;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
+	private TwitterClient clients;
+	private User mUser;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		clients=TwitterApplication.getRestClient();
 	}
 
 
@@ -29,9 +46,23 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		Intent i = new Intent(this, TimelineActivity.class);
-		startActivity(i);
+		clients.getAccountVerify(new JsonHttpResponseHandler() {
+			@Override
+			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
 
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+				Gson gson = new GsonBuilder().create();
+				mUser = new User();
+				mUser = gson.fromJson(response.toString(), User.class);
+				Intent intent= new Intent(LoginActivity.this, TimelineActivity.class);
+				intent.putExtra("user", Parcels.wrap(mUser));
+				startActivity(intent);
+
+			}
+		});
 
 	}
 

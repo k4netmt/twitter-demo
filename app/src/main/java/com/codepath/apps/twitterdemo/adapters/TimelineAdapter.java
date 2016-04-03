@@ -1,38 +1,65 @@
 package com.codepath.apps.twitterdemo.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.codepath.apps.twitterdemo.R;
+import com.codepath.apps.twitterdemo.activities.UserInfoActivity;
 import com.codepath.apps.twitterdemo.models.TimeStamp;
 import com.codepath.apps.twitterdemo.models.Tweet;
 import com.codepath.apps.twitterdemo.models.Variants;
-import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelinePhoto;
-import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelineText;
-import com.codepath.apps.twitterdemo.viewholder.ViewHolderTimelineVideo;
+import com.yqritc.scalablevideoview.ScalableType;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
 /**
  * Created by Kanet on 3/26/2016.
  */
-public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int TEXT=0;
     private static final int PHOTO=1;
     private static final int GIF=2;
     private static final int VIDEO=3;
-    private List<Tweet> mTweets;
+    public static final int TIMELINE_FRAQMENT=0;
+    public static final int USERTIMELINE_FRAQMENT=1;
+    public final List<Tweet> mTweets;
     private Context context;
+    private Tweet mTweet;
+    private int mFlagSetOnClickListener=0;
+
+    public void setmFlagSetOnClickListener(int mFlagSetOnClickListener) {
+        this.mFlagSetOnClickListener = mFlagSetOnClickListener;
+    }
+
     public TimelineAdapter(List<Tweet> tweets) {
         this.mTweets=tweets;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    private boolean checkSetOnClickListener(){
+        switch (mFlagSetOnClickListener){
+            case TIMELINE_FRAQMENT: return true;
+            case USERTIMELINE_FRAQMENT: return false;
+        }
+        return false;
     }
 
     @Override
@@ -43,7 +70,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (viewType) {
             case TEXT: {
                 View v2 = inflater.inflate(R.layout.item_timeline_text, parent, false);
-                viewHolder = new ViewHolderTimelineText(v2);
+                viewHolder = new ViewHolderTimelineText(context,v2);
                 break;
             }
             case PHOTO: {
@@ -63,7 +90,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             default:
                 View v = inflater.inflate(R.layout.item_timeline_text, parent, false);
-                viewHolder = new ViewHolderTimelineText(v);
+                viewHolder = new ViewHolderTimelineText(context,v);
                 break;
         }
         return viewHolder;
@@ -95,52 +122,69 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private void configureViewHolderTimelineText(ViewHolderTimelineText vhText, int position) {
+    private void configureViewHolderTimelineText(ViewHolderTimelineText viewHolder, int position) {
         final Tweet tweet =  mTweets.get(position);
         if (tweet!=null){
-            vhText.tvText.setText(tweet.getBody().trim());
-            vhText.tvTime.setText(TimeStamp.getDistanceTime(TimeStamp.getTime(Tweet.formatCreatedAt, tweet.getCreatedAt()), TimeStamp.CHARACTER_TIME));
-            vhText.tvName.setText(tweet.getUser().getName());
-            vhText.tvScreenName.setText(tweet.getUser().getScreenName());
+            mTweet=tweet;
+            viewHolder.tvText.setText(tweet.getBody().trim());
+            viewHolder.tvTime.setText(TimeStamp.getDistanceTime(TimeStamp.getTime(Tweet.formatCreatedAt, tweet.getCreatedAt()), TimeStamp.CHARACTER_TIME));
+            viewHolder.tvName.setText(tweet.getUser().getName());
+            viewHolder.tvScreenName.setText(tweet.getUser().getScreenName());
+            viewHolder.tvLike.setText(String.valueOf(tweet.getFavorite_count()));
+            viewHolder.tvRetweet.setText(String.valueOf(tweet.getRetweet_count()));
+            int idLike=tweet.isFavorited() ? R.drawable.likeactionon : R.drawable.likeaction;
+            viewHolder.ivLike.setImageResource(idLike);
             Glide.with(context)
                     .load(tweet.getUser().getProfileImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(vhText.ivAvatar);
+                    .into(viewHolder.ivAvatar);
         }
     }
 
-    private void configureViewHolderTimelinePhoto(ViewHolderTimelinePhoto vhText, int position) {
+    private void configureViewHolderTimelinePhoto(ViewHolderTimelinePhoto viewHolder, int position) {
         final Tweet tweet =  mTweets.get(position);
         if (tweet!=null){
-            vhText.tvText.setText(tweet.getBody().trim());
-            vhText.tvTime.setText(TimeStamp.getDistanceTime(TimeStamp.getTime(Tweet.formatCreatedAt, tweet.getCreatedAt()), TimeStamp.CHARACTER_TIME));
-            vhText.tvName.setText(tweet.getUser().getName());
-            vhText.tvScreenName.setText(tweet.getUser().getScreenName());
+            mTweet=tweet;
+            viewHolder.tvText.setText(tweet.getBody().trim());
+            viewHolder.tvTime.setText(TimeStamp.getDistanceTime(TimeStamp.getTime(Tweet.formatCreatedAt, tweet.getCreatedAt()), TimeStamp.CHARACTER_TIME));
+            viewHolder.tvName.setText(tweet.getUser().getName());
+            viewHolder.tvScreenName.setText(tweet.getUser().getScreenName());
+            viewHolder.tvLike.setText(String.valueOf(tweet.getFavorite_count()));
+            viewHolder.tvRetweet.setText(String.valueOf(tweet.getRetweet_count()));
+            int idLike=tweet.isFavorited() ? R.drawable.likeactionon : R.drawable.likeaction;
+            viewHolder.ivLike.setImageResource(idLike);
             Glide.with(context)
                     .load(tweet.getUser().getProfileImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(vhText.ivAvatar);
+                    .into(viewHolder.ivAvatar);
+            //if(checkSetOnClickListener()==true) viewHolder.ivAvatar.setOnClickListener(this);
             Glide.with(context)
                     .load(tweet.getExtendedEntities().getMedia().get(0).getMedia_url())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .override(600,400)
-                    .into(vhText.ivImage);
+                    .into(viewHolder.ivImage);
         }
     }
 
     private void configureViewHolderTimelineVideo(final ViewHolderTimelineVideo viewHolder, int position) {
         final Tweet tweet =  mTweets.get(position);
         if (tweet!=null){
+            mTweet=tweet;
             viewHolder.tvText.setText(tweet.getBody().trim());
             viewHolder.tvTime.setText(TimeStamp.getDistanceTime(TimeStamp.getTime(Tweet.formatCreatedAt, tweet.getCreatedAt())
                     , TimeStamp.CHARACTER_TIME));
             viewHolder.tvName.setText(tweet.getUser().getName());
             viewHolder.tvScreenName.setText(tweet.getUser().getScreenName());
+            viewHolder.tvLike.setText(String.valueOf(tweet.getFavorite_count()));
+            viewHolder.tvRetweet.setText(String.valueOf(tweet.getRetweet_count()));
+            int idLike=tweet.isFavorited() ? R.drawable.likeactionon : R.drawable.likeaction;
+            viewHolder.ivLike.setImageResource(idLike);
             Glide.with(context)
                     .load(tweet.getUser().getProfileImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(viewHolder.ivAvatar);
             Variants variants=new Variants();
+
             for (Variants v :
                     tweet.getExtendedEntities().getMedia().get(0).getVideo_info().getVariants()) {
                 if (v.getContent_type().compareTo("video/mp4")==0)
@@ -163,11 +207,14 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private void configureViewHolderTimelineGif(final ViewHolderTimelineVideo viewHolder, int position) {
         final Tweet tweet =  mTweets.get(position);
         if (tweet!=null){
+            mTweet=tweet;
             viewHolder.tvText.setText(tweet.getBody().trim());
             viewHolder.tvTime.setText(TimeStamp.getDistanceTime(TimeStamp.getTime(Tweet.formatCreatedAt, tweet.getCreatedAt())
                     , TimeStamp.CHARACTER_TIME));
             viewHolder.tvName.setText(tweet.getUser().getName());
             viewHolder.tvScreenName.setText(tweet.getUser().getScreenName());
+            int idLike=tweet.isFavorited() ? R.drawable.likeactionon : R.drawable.likeaction;
+            viewHolder.ivLike.setImageResource(idLike);
             Glide.with(context)
                     .load(tweet.getUser().getProfileImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -192,6 +239,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    public void clear() {
+        mTweets.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mTweets.size();
@@ -214,5 +266,115 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return VIDEO;
         }
         return TEXT;
+    }
+    public class ViewHolderTimelineText extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private Context context;
+        public TextView tvText;
+        public TextView tvTime;
+        public ImageView ivAvatar;
+        public TextView tvName;
+        public TextView tvScreenName;
+        public TextView tvLike;
+        public TextView tvRetweet;
+        public ImageView ivLike;
+        public ViewHolderTimelineText(Context context,View itemView) {
+            super(itemView);
+            this.context=context;
+            tvText=(TextView)itemView.findViewById(R.id.tvText);
+            tvTime=(TextView)itemView.findViewById(R.id.tvTime);
+            tvName=(TextView)itemView.findViewById(R.id.tvName);
+            tvScreenName=(TextView)itemView.findViewById(R.id.tvScreenName);
+            ivAvatar=(ImageView)itemView.findViewById(R.id.ivAvatar);
+            tvLike=(TextView)itemView.findViewById(R.id.tvLike);
+            tvRetweet=(TextView)itemView.findViewById(R.id.tvRetweet);
+            ivLike=(ImageView)itemView.findViewById(R.id.ivLike);
+            if(checkSetOnClickListener()==true) ivAvatar.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.ivAvatar:{
+                    Intent intent=new Intent(context, UserInfoActivity.class);
+                    intent.putExtra("user", Parcels.wrap(mTweets.get(getAdapterPosition()).getUser()));
+                    context.startActivity(intent);
+                    break;
+                }
+            }
+        }
+    }
+
+    public class ViewHolderTimelineVideo extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView tvText;
+        public TextView tvTime;
+        public ImageView ivAvatar;
+        public TextView tvName;
+        public TextView tvScreenName;
+        public VideoView svvVideo;
+        public TextView tvLike;
+        public TextView tvRetweet;
+        public ImageView ivLike;
+        public ViewHolderTimelineVideo(View itemView) {
+            super(itemView);
+            tvText=(TextView)itemView.findViewById(R.id.tvText);
+            tvTime=(TextView)itemView.findViewById(R.id.tvTime);
+            tvName=(TextView)itemView.findViewById(R.id.tvName);
+            tvScreenName=(TextView)itemView.findViewById(R.id.tvScreenName);
+            ivAvatar=(ImageView)itemView.findViewById(R.id.ivAvatar);
+            svvVideo=(VideoView)itemView.findViewById(R.id.vvVideo);
+            tvLike=(TextView)itemView.findViewById(R.id.tvLike);
+            tvRetweet=(TextView)itemView.findViewById(R.id.tvRetweet);
+            ivLike=(ImageView)itemView.findViewById(R.id.ivLike);
+            if(checkSetOnClickListener()==true) ivAvatar.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.ivAvatar:{
+                    Intent intent=new Intent(context, UserInfoActivity.class);
+                    intent.putExtra("user", Parcels.wrap(mTweets.get(getAdapterPosition()).getUser()));
+                    context.startActivity(intent);
+                    break;
+                }
+            }
+        }
+    }
+
+    public class ViewHolderTimelinePhoto extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView tvText;
+        public TextView tvTime;
+        public ImageView ivAvatar;
+        public TextView tvName;
+        public TextView tvScreenName;
+        public ImageView ivImage;
+        public TextView tvLike;
+        public TextView tvRetweet;
+        public ImageView ivLike;
+        public ViewHolderTimelinePhoto(View itemView) {
+            super(itemView);
+            tvText=(TextView)itemView.findViewById(R.id.tvText);
+            tvTime=(TextView)itemView.findViewById(R.id.tvTime);
+            tvName=(TextView)itemView.findViewById(R.id.tvName);
+            tvScreenName=(TextView)itemView.findViewById(R.id.tvScreenName);
+            ivAvatar=(ImageView)itemView.findViewById(R.id.ivAvatar);
+            tvLike=(TextView)itemView.findViewById(R.id.tvLike);
+            tvRetweet=(TextView)itemView.findViewById(R.id.tvRetweet);
+            ivLike=(ImageView)itemView.findViewById(R.id.ivLike);
+            if(checkSetOnClickListener()==true) ivAvatar.setOnClickListener(this);
+            ivImage=(ImageView)itemView.findViewById(R.id.ivImage);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.ivAvatar:{
+                    Intent intent=new Intent(context, UserInfoActivity.class);
+                    intent.putExtra("user", Parcels.wrap(mTweets.get(getAdapterPosition()).getUser()));
+                    context.startActivity(intent);
+                    break;
+                }
+            }
+        }
     }
 }

@@ -88,6 +88,22 @@ public class Tweet{
         return extendedEntities;
     }
 
+    public static String getFormatCreatedAt() {
+        return formatCreatedAt;
+    }
+
+    public int getFavorite_count() {
+        return favorite_count;
+    }
+
+    public int getRetweet_count() {
+        return retweet_count;
+    }
+
+    public boolean isFavorited() {
+        return favorited;
+    }
+
     @Column(name = "body")
     @SerializedName("text")
     private String body;
@@ -105,6 +121,14 @@ public class Tweet{
     @SerializedName("extended_entities")
     private ExtendedEntities extendedEntities;
 
+    @SerializedName("favorite_count")
+    private int favorite_count;
+
+    @SerializedName("retweet_count")
+    private int retweet_count;
+
+    @SerializedName("favorited")
+    private boolean favorited;
   /*  public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet=new Tweet();
         try{
