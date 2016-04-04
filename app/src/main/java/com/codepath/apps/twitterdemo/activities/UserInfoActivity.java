@@ -1,10 +1,13 @@
 package com.codepath.apps.twitterdemo.activities;
 
+import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +15,9 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.widget.ImageView;
@@ -25,6 +31,7 @@ import com.codepath.apps.twitterdemo.adapters.HomeFraqmentAdapter;
 import com.codepath.apps.twitterdemo.adapters.UserTabsAdapter;
 import com.codepath.apps.twitterdemo.application.TwitterApplication;
 import com.codepath.apps.twitterdemo.clients.TwitterClient;
+import com.codepath.apps.twitterdemo.fraqments.ComposeFragment;
 import com.codepath.apps.twitterdemo.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -50,7 +57,6 @@ public class UserInfoActivity extends AppCompatActivity {
     @Bind(R.id.viewpager)ViewPager viewPager;
     @Bind(R.id.sliding_tabs)TabLayout tabLayout;
     @Bind(R.id.ivBackgound)ImageView ivBackground;
-    @Bind(R.id.toolbar)Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +66,11 @@ public class UserInfoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         clients= TwitterApplication.getRestClient();
         mUser= Parcels.unwrap(getIntent().getParcelableExtra("user"));
-        Log.d("DEBUG",mUser.getName());
+        Log.d("DEBUG", mUser.getName());
+        // Specify that the Home button should show an "Up" caret, indicating that touching the
+        // button will take the user one step up in the application's hierarchy.
         setupUser();
         setupTabs();
-        setSupportActionBar(toolbar);
-
     }
 
     private void setupTabs() {
@@ -95,7 +101,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private SpannableString setBackTextNumber(long number,String text){
         String sFollowers=String.valueOf(number);
         SpannableString ss=new SpannableString(sFollowers+text);
-        ss.setSpan(new ForegroundColorSpan(Color.BLACK),0,sFollowers.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(Color.BLACK), 0, sFollowers.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return ss;
     }
 
@@ -104,6 +110,12 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onDestroy();
         mUser=null;
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_userinfo_activity, menu);
+        //menu.findItem(R.id.action_signout).setIcon(R.drawable.profile);
+        return super.onCreateOptionsMenu(menu);
+    }
 
 }

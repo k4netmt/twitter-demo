@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +61,9 @@ public class ComposeFragment extends DialogFragment implements TextWatcher{
     @Bind(R.id.btnTweet) Button btnTweet;
     @Bind(R.id.editText) EditText etContent;
     @Bind(R.id.tvCountLength) TextView tvCountLength;
+    @Bind(R.id.tvScreenName) TextView tvSceenName;
+    @Bind(R.id.ibtnClose) ImageButton ibtnClose;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,6 +83,7 @@ public class ComposeFragment extends DialogFragment implements TextWatcher{
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.waitingphoto)
                 .into(ivAvatar);
+        tvSceenName.setText(mUser.getScreenName());
         tvName.setText(mUser.getName());
         tvCountLength.setText("0");
     }
@@ -99,7 +104,7 @@ public class ComposeFragment extends DialogFragment implements TextWatcher{
     }
 
     @OnClick(R.id.btnTweet)
-    public void Tweet(Button button){
+    public void onTweet(){
         if (etContent.getText().length()>140){
             Toast.makeText(getActivity().getApplicationContext(),"Limited status is 140 character",Toast.LENGTH_LONG).show();
             return;
@@ -119,6 +124,11 @@ public class ComposeFragment extends DialogFragment implements TextWatcher{
                 getDialog().dismiss();
             }
         });
+    }
+
+    @OnClick(R.id.ibtnClose)
+    public void onClose(){
+        getDialog().dismiss();
     }
 
     @Override

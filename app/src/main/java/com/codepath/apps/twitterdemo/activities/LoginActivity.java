@@ -3,6 +3,7 @@ package com.codepath.apps.twitterdemo.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -49,7 +50,8 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		clients.getAccountVerify(new JsonHttpResponseHandler() {
 			@Override
 			public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-				super.onFailure(statusCode, headers, responseString, throwable);
+				Log.d("DEBUG",throwable.toString());
+				TwitterClient.getInstance(TwitterClient.class,getApplicationContext()).clearAccessToken();
 			}
 
 			@Override

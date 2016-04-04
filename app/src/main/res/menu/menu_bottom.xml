@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.TimelineActivity">
    <item android:id="@+id/action_compose"
-        android:icon="@drawable/pen"
+        android:icon="@drawable/ic_create_white_48dp"
         android:title="tweet"
         app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_signout"
@@ -13,8 +13,7 @@
     </item>
     <item android:id="@+id/action_profile"
         android:orderInCategory="100"
-        android:icon="@drawable/profile"
+        android:icon="@drawable/ic_person_white_48dp"
         android:title="View Profile"
         app:showAsAction="ifRoom"/>
-
 </menu>
