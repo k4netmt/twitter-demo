@@ -25,7 +25,7 @@ Update Week 3
 * [x] User can click a “Compose” icon in the Action Bar on the top right
 * [x] User can then enter a new tweet and post this to twitter 
 * [x] User is taken back to home timeline with new tweet visible in timeline 
-* 
+
 Week 4 Project: Twitter with Fragments
 Spent time: 30 hours
 * [x] User can switch between Timeline and Mention views using tabs.
@@ -38,3 +38,5 @@ Spent time: 30 hours
 * [x] Profile view should include that user's timeline
 * [x] Use Parcelable instead of Serializable using the popular Parceler library.
 * [x] Apply the popular Butterknife annotation library to reduce view boilerplate
+* 
+* ![Video Walkthrough] (https://github.com/k4netmt/twitter-demo/blob/master/week4.gif)
